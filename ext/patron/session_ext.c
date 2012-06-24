@@ -326,6 +326,7 @@ static void set_options_from_request(VALUE self, VALUE request) {
   VALUE ignore_content_length = Qnil;
   VALUE insecure              = Qnil;
   VALUE buffer_size           = Qnil;
+  VALUE certificate           = Qnil;
 
   headers = rb_iv_get(request, "@headers");
   if (!NIL_P(headers)) {
@@ -470,6 +471,13 @@ static void set_options_from_request(VALUE self, VALUE request) {
   if (!NIL_P(buffer_size)) {
      curl_easy_setopt(curl, CURLOPT_BUFFERSIZE, FIX2INT(buffer_size));
   }
+
+  /* client certificate */
+  certificate = rb_iv_get(request, "@cert");
+  if (!NIL_P(certificate)) {
+    curl_easy_setopt(curl, CURLOPT_SSLCERT, StringValuePtr(certificate));
+  }
+
 
   if(state->debug_file) {
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);

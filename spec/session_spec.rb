@@ -303,6 +303,13 @@ describe Patron::Session do
     (request.path + '?' + request.query_string).should == "/test?foo=bar&baz=quux"
   end
 
+  it "should allow you to specify a client-side certificate" do
+    @session.cert = "/path/to/cert.pem"
+    response = @session.get("/test")
+    body = YAML::load(response.body)
+    body.request_method.should == "GET"
+  end
+
   def encode_authz(user, passwd)
     "Basic " + Base64.encode64("#{user}:#{passwd}").strip
   end

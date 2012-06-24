@@ -52,6 +52,9 @@ module Patron
     # Username and password for http authentication
     attr_accessor :username, :password
 
+    # Client SSL Certificate
+    attr_accessor :cert
+
     # Proxy URL in cURL format ('hostname:8080')
     attr_accessor :proxy
 
@@ -200,6 +203,7 @@ module Patron
       req.max_redirects          = options.fetch :max_redirects,         self.max_redirects
       req.username               = options.fetch :username,              self.username
       req.password               = options.fetch :password,              self.password
+      req.cert                   = options.fetch :cert,                  self.cert
       req.proxy                  = options.fetch :proxy,                 self.proxy
       req.proxy_type             = options.fetch :proxy_type,            self.proxy_type
       req.auth_type              = options.fetch :auth_type,             self.auth_type
