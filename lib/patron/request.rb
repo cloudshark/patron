@@ -45,13 +45,14 @@ module Patron
     READER_VARS = [
       :url, :username, :password, :file_name, :proxy, :proxy_type, :insecure,
       :ignore_content_length, :multipart, :action, :timeout, :connect_timeout,
-      :max_redirects, :headers, :auth_type, :upload_data, :buffer_size
+      :max_redirects, :headers, :auth_type, :upload_data, :buffer_size,
+      :ssl_cert 
     ]
 
     WRITER_VARS = [
       :url, :username, :password, :file_name, :proxy, :proxy_type, :insecure,
       :ignore_content_length, :multipart,
-      :cert
+      :ssl_cert, :ssl_key, :ssl_keypasswd
     ]
 
     attr_reader *READER_VARS
@@ -156,13 +157,15 @@ module Patron
     def marshal_dump
       [ @url, @username, @password, @file_name, @proxy, @proxy_type, @insecure,
         @ignore_content_length, @multipart, @action, @timeout, @connect_timeout,
-        @max_redirects, @headers, @auth_type, @upload_data, @buffer_size, @cert ]
+        @max_redirects, @headers, @auth_type, @upload_data, @buffer_size, 
+        @ssl_cert, @ssl_key, @ssl_keypasswd ]
     end
 
     def marshal_load(data)
       @url, @username, @password, @file_name, @proxy, @proxy_type, @insecure,
       @ignore_content_length, @multipart, @action, @timeout, @connect_timeout,
-      @max_redirects, @headers, @auth_type, @upload_data, @buffer_size, @cert = data
+      @max_redirects, @headers, @auth_type, @upload_data, @buffer_size, 
+      @ssl_cert, @ssl_key, @ssl_keypasswd  = data
     end
 
   end

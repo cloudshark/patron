@@ -326,7 +326,9 @@ static void set_options_from_request(VALUE self, VALUE request) {
   VALUE ignore_content_length = Qnil;
   VALUE insecure              = Qnil;
   VALUE buffer_size           = Qnil;
-  VALUE certificate           = Qnil;
+  VALUE ssl_cert              = Qnil;
+  VALUE ssl_key               = Qnil;
+  VALUE ssl_keypasswd         = Qnil;
 
   headers = rb_iv_get(request, "@headers");
   if (!NIL_P(headers)) {
@@ -473,10 +475,24 @@ static void set_options_from_request(VALUE self, VALUE request) {
   }
 
   /* client certificate */
-  certificate = rb_iv_get(request, "@cert");
-  if (!NIL_P(certificate)) {
-    curl_easy_setopt(curl, CURLOPT_SSLCERT, StringValuePtr(certificate));
+  ssl_cert = rb_iv_get(request, "@ssl_cert");
+  if (!NIL_P(ssl_cert)) {
+    curl_easy_setopt(curl, CURLOPT_SSLCERT, StringValuePtr(ssl_cert));
   }
+
+  /* client cert private key */
+  ssl_key = rb_iv_get(request, "@ssl_key");
+  if (!NIL_P(ssl_key)) {
+    curl_easy_setopt(curl, CURLOPT_SSLKEY, StringValuePtr(ssl_key));
+  }
+
+  /* client cert key password */
+  ssl_keypasswd = rb_iv_get(request, "@ssl_keypasswd");
+  if (!NIL_P(ssl_keypasswd)) {
+    curl_easy_setopt(curl, CURLOPT_KEYPASSWD, StringValuePtr(ssl_keypasswd));
+  }
+
+
 
 
   if(state->debug_file) {

@@ -303,12 +303,31 @@ describe Patron::Session do
     (request.path + '?' + request.query_string).should == "/test?foo=bar&baz=quux"
   end
 
+  # SSL Certificates (client)
+
   it "should allow you to specify a client-side certificate" do
-    @session.cert = "/path/to/cert.pem"
+    @session.ssl_cert = "/path/to/cert.pem"
     response = @session.get("/test")
     body = YAML::load(response.body)
     body.request_method.should == "GET"
   end
+
+  it "should allow you to specify a client-side private key file" do
+    @session.ssl_key = "/path/to/private.key"
+    response = @session.get("/test")
+    body = YAML::load(response.body)
+    body.request_method.should == "GET"
+  end
+
+  it "should allow you to specify a private-key password" do
+    @session.ssl_key = "/path/to/passwd.key"
+    @session.ssl_keypasswd = "password"
+    response = @session.get("/test")
+    body = YAML::load(response.body)
+    body.request_method.should == "GET"
+  end
+
+
 
   def encode_authz(user, passwd)
     "Basic " + Base64.encode64("#{user}:#{passwd}").strip
