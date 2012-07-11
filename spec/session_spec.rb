@@ -304,6 +304,9 @@ describe Patron::Session do
   end
 
   # SSL Certificates (client)
+  # 
+  # Note: these do not actually test a secure connection
+  # they just make sure that the setter methods exist.
 
   it "should allow you to specify a client-side certificate" do
     @session.ssl_cert = "/path/to/cert.pem"
@@ -318,16 +321,6 @@ describe Patron::Session do
     body = YAML::load(response.body)
     body.request_method.should == "GET"
   end
-
-  it "should allow you to specify a private-key password" do
-    @session.ssl_key = "/path/to/passwd.key"
-    @session.ssl_keypasswd = "password"
-    response = @session.get("/test")
-    body = YAML::load(response.body)
-    body.request_method.should == "GET"
-  end
-
-
 
   def encode_authz(user, passwd)
     "Basic " + Base64.encode64("#{user}:#{passwd}").strip
