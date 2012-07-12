@@ -322,6 +322,14 @@ describe Patron::Session do
     body.request_method.should == "GET"
   end
 
+
+  it "should allow you to specify a CA certificate" do
+    @session.ssl_cainfo = "/path/to/ca-cert.pem"
+    response = @session.get("/test")
+    body = YAML::load(response.body)
+    body.request_method.should == "GET"
+  end
+
   def encode_authz(user, passwd)
     "Basic " + Base64.encode64("#{user}:#{passwd}").strip
   end

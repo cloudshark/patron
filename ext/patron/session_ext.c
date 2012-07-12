@@ -328,6 +328,7 @@ static void set_options_from_request(VALUE self, VALUE request) {
   VALUE buffer_size           = Qnil;
   VALUE ssl_cert              = Qnil;
   VALUE ssl_key               = Qnil;
+  VALUE ssl_cainfo            = Qnil;
 
   headers = rb_iv_get(request, "@headers");
   if (!NIL_P(headers)) {
@@ -483,6 +484,12 @@ static void set_options_from_request(VALUE self, VALUE request) {
   ssl_key = rb_iv_get(request, "@ssl_key");
   if (!NIL_P(ssl_key)) {
     curl_easy_setopt(curl, CURLOPT_SSLKEY, StringValuePtr(ssl_key));
+  }
+
+  /* CA certificate */
+  ssl_cainfo = rb_iv_get(request, "@ssl_cainfo");
+  if (!NIL_P(ssl_cainfo)) {
+    curl_easy_setopt(curl, CURLOPT_CAINFO, StringValuePtr(ssl_cainfo));
   }
 
 
