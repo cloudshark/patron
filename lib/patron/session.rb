@@ -52,6 +52,9 @@ module Patron
     # Username and password for http authentication
     attr_accessor :username, :password
 
+    # Force SSL version
+    attr_accessor :ssl_version
+
     # Client SSL Certificate
     attr_accessor :ssl_cert
 
@@ -209,6 +212,7 @@ module Patron
       req.max_redirects          = options.fetch :max_redirects,         self.max_redirects
       req.username               = options.fetch :username,              self.username
       req.password               = options.fetch :password,              self.password
+      req.ssl_version            = options.fetch :ssl_version,           self.ssl_version
       req.ssl_cert               = options.fetch :ssl_cert,              self.ssl_cert
       req.ssl_key                = options.fetch :ssl_key,               self.ssl_key
       req.ssl_cainfo             = options.fetch :ssl_cainfo,            self.ssl_cainfo

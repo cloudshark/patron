@@ -329,6 +329,7 @@ static void set_options_from_request(VALUE self, VALUE request) {
   VALUE ssl_cert              = Qnil;
   VALUE ssl_key               = Qnil;
   VALUE ssl_cainfo            = Qnil;
+  ID    ssl_version           = Qnil;
 
   headers = rb_iv_get(request, "@headers");
   if (!NIL_P(headers)) {
@@ -492,6 +493,20 @@ static void set_options_from_request(VALUE self, VALUE request) {
     curl_easy_setopt(curl, CURLOPT_CAINFO, StringValuePtr(ssl_cainfo));
   }
 
+  /* SSL force version either sslv3 or tlsv1 */
+  VALUE ssl_version_name = rb_iv_get(request, "@ssl_version");
+  if (!NIL_P(ssl_version_name)) {
+    ssl_version = rb_to_id(ssl_version_name);
+    if (ssl_version == rb_intern("tlsv1")) {
+      curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+    } else if (ssl_version == rb_intern("sslv2")) {
+      curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv2);
+    } else if (ssl_version == rb_intern("sslv3")) {
+      curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv3);
+    } else {
+      rb_raise(rb_eArgError, "SSL Version must be set to :tlsv1, :sslv2, or :sslv3");
+    }
+  }
 
   if(state->debug_file) {
     curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
