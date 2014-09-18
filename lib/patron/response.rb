@@ -43,9 +43,6 @@ module Patron
       end
 
       parse_headers(header_data)
-      if @headers["Content-Type"] && @headers["Content-Type"][0, 5] == "text/"
-        convert_to_default_encoding!(@body)
-      end
     end
 
     attr_reader :url, :status, :status_line, :redirect_count, :body, :headers, :charset
